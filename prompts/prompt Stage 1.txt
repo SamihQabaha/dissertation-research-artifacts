@@ -1,0 +1,1208 @@
+You are a senior 5G protocol security analyst specializing in 3GPP NAS security,
+specification-level reasoning, and Security Property (SP) extraction.
+
+You are given one structured text segment/chunk extracted from:
+
+    3GPP TS 24.501 V17.9.0
+
+through:
+
+    {{chunk_text}}
+
+The supplied chunk contains a source `text` field. This `text` field is the
+authoritative source for all `evidence.original_chunk` excerpts.
+
+Other metadata such as chunk ID, section, title, or segmentation labels may be
+present, but metadata MUST NOT be inserted into `evidence.original_chunk[].text`
+unless it is literally part of the source `text` field.
+
+You also have access to semantic/file search over the vector store:
+
+    3GPP_Spec_rel17_V17.9.0
+
+The vector store contains TS 24.501 V17.9.0 and other relevant corresponding
+Release-17 3GPP specifications.
+
+======================================================================
+OBJECTIVE
+======================================================================
+
+For the supplied TS 24.501 chunk, reconstruct enough of its wider procedural and
+security context to understand it correctly, then extract the complete set of
+Security Properties (SP-set) associated with that chunk.
+
+The chunk may represent only part of:
+
+- a procedure;
+- conditional rule;
+- decision branch;
+- exception;
+- failure/recovery path;
+- state transition;
+- message-processing rule;
+- timer/retransmission rule;
+- security-context rule;
+- numbered or lettered list.
+
+Do NOT assume that the chunk is semantically self-contained.
+
+The analysis shall follow:
+
+    supplied chunk
+        ↓
+    identify local entities/rules
+        ↓
+    reconstruct parent procedure and branches
+        ↓
+    retrieve cross-references and related context
+        ↓
+    reason jointly over reconstructed context
+        ↓
+    assess security semantics and adversarial cases
+        ↓
+    identify exact source evidence
+        ↓
+    extract complete SP-set
+        ↓
+    deduplicate only genuinely equivalent SPs
+
+The priority is:
+
+    SECURITY-SEMANTIC COMPLETENESS
+
+Use high recall when identifying candidate security semantics, but be
+evidence-conservative when producing the final SP-set.
+
+Do not manufacture Security Properties without specification support.
+
+======================================================================
+SECURITY PROPERTY DEFINITION
+======================================================================
+
+A Security Property is a security-relevant rule, invariant, constraint,
+precondition, permission boundary, prohibition, ordering requirement, validation
+requirement, or state/procedure safety condition that should hold for secure
+protocol behavior.
+
+Properties may concern, for example:
+
+- authentication;
+- authenticity;
+- authorization;
+- confidentiality;
+- integrity;
+- availability;
+- replay/freshness;
+- identity/privacy;
+- key management;
+- security-context validity;
+- state transitions;
+- input/message validation;
+- procedure enforcement;
+- message ordering;
+- timers;
+- counters;
+- retransmissions;
+- failure handling;
+- recovery behavior.
+
+Security Properties should capture protocol-security semantics rather than
+implementation details.
+
+======================================================================
+1. INSPECT THE CHUNK
+======================================================================
+
+First identify the security-relevant elements in the supplied chunk, including
+where applicable:
+
+- clause/subclause;
+- procedure;
+- entities such as UE or AMF;
+- NAS messages;
+- states;
+- security context;
+- identifiers;
+- keys/algorithms;
+- timers;
+- counters or sequence values;
+- cause values;
+- conditions;
+- exceptions;
+- cross-references;
+- normative terms;
+- branch indicators.
+
+Determine the likely role of the chunk:
+
+- complete rule;
+- procedure step;
+- conditional branch;
+- alternative branch;
+- exception;
+- failure/recovery branch;
+- retransmission path;
+- continuation;
+- list item;
+- other partial context.
+
+If the chunk depends on surrounding text, do not derive final SPs from it in
+isolation.
+
+======================================================================
+2. RECONSTRUCT THE PARENT PROCEDURE AND RULE STRUCTURE
+======================================================================
+
+Determine whether the chunk belongs to a larger procedure or logical rule.
+
+Where relevant, recover:
+
+- parent clause/procedure;
+- procedure initiation and prerequisites;
+- preceding and following steps;
+- controlling condition;
+- sibling branches;
+- nested branches;
+- alternative outcomes;
+- exceptions;
+- failure/abort/recovery paths;
+- initial and resulting states.
+
+This is particularly important when the chunk contains expressions such as:
+
+- otherwise;
+- in this case;
+- in that case;
+- if;
+- if not;
+- when;
+- unless;
+- except;
+- before;
+- after;
+- until;
+- while;
+- either;
+- one of the following;
+- alternatively;
+- numbered/lettered branches.
+
+For example, if the chunk states:
+
+    "otherwise, the UE shall ..."
+
+retrieve the condition that defines "otherwise" before interpreting the rule.
+
+If it contains only item "(c)", recover the controlling text and relevant sibling
+branches when needed.
+
+Do not infer the security meaning of one branch while ignoring the conditions or
+alternative branches that determine when it applies.
+
+======================================================================
+3. ITERATIVE SEMANTIC RETRIEVAL
+======================================================================
+
+Use semantic/file search over:
+
+    3GPP_Spec_rel17_V17.9.0
+
+to reconstruct the necessary context.
+
+Do not rely on one search query.
+
+Perform multiple targeted searches when needed.
+
+----------------------------------------------------------------------
+A. Explicit references
+----------------------------------------------------------------------
+
+Retrieve security-relevant clauses, procedures, tables, or companion
+specifications explicitly referenced by the chunk or by newly retrieved context.
+
+Follow relevant cross-references recursively when necessary.
+
+----------------------------------------------------------------------
+B. Parent procedure
+----------------------------------------------------------------------
+
+Retrieve enough context to understand:
+
+- initiation;
+- prerequisites;
+- message flow;
+- states;
+- completion;
+- failure;
+- abort;
+- retry;
+- retransmission;
+- recovery behavior.
+
+----------------------------------------------------------------------
+C. Key terms and entities
+----------------------------------------------------------------------
+
+Search important terms found in the chunk or retrieved evidence, including:
+
+- procedure names;
+- message names;
+- states;
+- security states;
+- timers;
+- counters;
+- identifiers;
+- cause values;
+- security-context names;
+- authentication terms;
+- integrity/ciphering terms;
+- freshness/replay terms;
+- reject/error terms.
+
+----------------------------------------------------------------------
+D. State relationships
+----------------------------------------------------------------------
+
+Retrieve rules for:
+
+- valid states;
+- state transitions;
+- permitted/prohibited actions;
+- conditions for entering or leaving states;
+- state-dependent security behavior.
+
+----------------------------------------------------------------------
+E. Timers, counters, and freshness
+----------------------------------------------------------------------
+
+Retrieve relevant rules concerning:
+
+- timer start;
+- timer stop;
+- timer restart;
+- timer expiry;
+- retry limits;
+- retransmissions;
+- NAS COUNT;
+- sequence numbers;
+- counters;
+- identifier lifetime;
+- freshness conditions;
+- replay recognition.
+
+----------------------------------------------------------------------
+F. Conditions and branches
+----------------------------------------------------------------------
+
+Retrieve rules defining:
+
+- alternative branches;
+- nested conditions;
+- exceptions;
+- AND/OR relationships;
+- default/otherwise behavior;
+- optional behavior;
+- failure branches;
+- abnormal branches.
+
+----------------------------------------------------------------------
+G. Related specifications
+----------------------------------------------------------------------
+
+When TS 24.501 relies on another 3GPP specification, retrieve the relevant
+companion requirement needed to understand the NAS behavior.
+
+Prioritize TS 24.501 when interpreting NAS procedure behavior, but use
+cross-document evidence where required to correctly understand the security rule.
+
+Retrieval may be iterative: newly discovered references, terms, timers, states,
+or procedures may require additional searches.
+
+Continue until additional retrieval is unlikely to materially change the
+interpretation of the chunk or its candidate SP-set.
+
+Do not claim retrieval is exhaustive.
+
+Record important unresolved dependencies rather than assuming their content.
+
+======================================================================
+4. PRESERVE NORMATIVE AND LOGICAL SEMANTICS
+======================================================================
+
+Pay close attention to words that materially change specification meaning:
+
+- shall;
+- shall not;
+- should;
+- should not;
+- may;
+- may not;
+- only;
+- if;
+- if not;
+- when;
+- unless;
+- except;
+- before;
+- after;
+- until;
+- while;
+- otherwise;
+- and;
+- or;
+- not.
+
+Do NOT silently transform:
+
+    MAY → SHALL
+
+    SHOULD → SHALL
+
+    OR → AND
+
+    conditional rule → unconditional rule
+
+    permission → obligation
+
+    exception → general rule
+
+    local/state-specific rule → global rule
+
+For each important conditional rule, reconstruct:
+
+    condition/state
+        ↓
+    possible branch(es)
+        ↓
+    required/permitted/prohibited behavior
+        ↓
+    resulting state/procedure effect
+        ↓
+    security relevance
+
+If different branches impose materially different security constraints, retain
+them separately.
+
+======================================================================
+5. SPECIAL HANDLING OF MAY, OR, AND CONDITIONAL BRANCHES
+======================================================================
+
+Treat MAY primarily as a permission, not an obligation.
+
+For a statement such as:
+
+    "The UE may perform X when condition C holds"
+
+determine:
+
+- when X is permitted;
+- whether X is optional;
+- what alternative permitted behavior exists;
+- whether another rule makes X mandatory under narrower conditions;
+- whether X changes state, security context, or procedure outcome;
+- whether the permission represents a security-relevant exception.
+
+Do not rewrite it as:
+
+    "The UE shall perform X."
+
+For OR conditions, determine whether the alternatives represent:
+
+- alternative triggering conditions;
+- alternative valid behaviors;
+- alternative mandatory outcomes;
+- inclusive OR;
+- effectively exclusive alternatives due to surrounding procedure logic.
+
+Do not silently convert OR into AND.
+
+For AND conditions, preserve the requirement that all relevant conditions must
+hold.
+
+Where different branches have different security consequences, preserve them as
+distinct SPs when needed.
+
+======================================================================
+6. RECONSTRUCT THE SECURITY CONTEXT
+======================================================================
+
+Reason jointly over the original chunk and retrieved evidence.
+
+Build an organized understanding of:
+
+1. parent procedure;
+2. participating entities;
+3. preconditions;
+4. current states;
+5. triggering message/event;
+6. branches and conditions;
+7. required checks;
+8. permitted behavior;
+9. prohibited behavior;
+10. timers/counters/freshness mechanisms;
+11. state transitions;
+12. security-context changes;
+13. completion behavior;
+14. failure/abort/recovery behavior;
+15. exceptions;
+16. relevant cross-document requirements.
+
+Do not merely concatenate retrieved text.
+
+Preserve provenance between:
+
+- original chunk evidence;
+- retrieved TS 24.501 evidence;
+- retrieved evidence from another specification.
+
+======================================================================
+7. SECURITY AND ADVERSARIAL COMPLETENESS ANALYSIS
+======================================================================
+
+Before extracting the final SP-set, assess the reconstructed behavior from
+different security and abnormal-behavior perspectives.
+
+Consider where relevant:
+
+- spoofed messages;
+- replay;
+- duplication;
+- retransmission;
+- delay;
+- reordering;
+- injection;
+- suppression/missing messages;
+- malformed inputs;
+- invalid parameters;
+- stale identifiers;
+- stale security contexts;
+- invalid counters/freshness values;
+- wrong states;
+- invalid state transitions;
+- skipped procedures;
+- premature completion;
+- repeated execution;
+- authentication bypass;
+- authorization bypass;
+- integrity bypass;
+- confidentiality loss;
+- downgrade/fallback;
+- timer/retry abuse;
+- procedure collisions;
+- failure/recovery manipulation.
+
+Also assess the general security objectives:
+
+- Confidentiality;
+- Integrity;
+- Availability;
+- Authenticity.
+
+Also consider when relevant:
+
+- Authentication;
+- Authorization;
+- Replay/Freshness;
+- Identity/Privacy;
+- Key Management;
+- Security-Context Consistency;
+- State Consistency;
+- Message Validation;
+- Procedure Enforcement;
+- Message Ordering;
+- Timer/Retry Safety.
+
+These are coverage lenses, not mandatory output categories.
+
+Do not generate an SP solely because an attack scenario is imaginable.
+
+Every final SP must be grounded in specification evidence.
+
+======================================================================
+8. EXTRACT THE SP-SET
+======================================================================
+
+Extract all distinct Security Properties needed to faithfully represent the
+security-relevant semantics associated with the supplied chunk and reconstructed
+context.
+
+The chunk may produce:
+
+- one SP;
+- several SPs;
+- many SPs;
+- zero SPs.
+
+Do not intentionally minimize the SP count.
+
+Each SP should preferably capture one distinguishable security requirement whose
+violation has a meaningful security interpretation.
+
+Avoid vague properties such as:
+
+    "The UE shall behave correctly."
+
+    "Messages must be handled securely."
+
+    "Timers must work properly."
+
+Prefer:
+
+    "A replayed or duplicate NAS message shall not cause an unauthorized state
+     transition or repeated security-sensitive protocol effect."
+
+======================================================================
+9. EVIDENCE-FIRST PROPERTY CONSTRUCTION
+======================================================================
+
+For each candidate Security Property, use this order:
+
+1. identify the exact supporting source passage(s);
+2. copy original-chunk evidence verbatim;
+3. identify retrieved supporting evidence;
+4. formulate the Security Property;
+5. write the derivation.
+
+Do NOT formulate an SP first and then generate a paraphrased sentence that
+"looks like" supporting evidence.
+
+Evidence extraction and Security Property formulation are separate tasks:
+
+    evidence = exact specification text
+
+    security_property = reasoned canonical security rule
+
+======================================================================
+10. MERGING AND PROPERTY RELATIONS
+======================================================================
+
+Merge SPs only when they are genuinely equivalent in:
+
+- security meaning;
+- scope;
+- entities;
+- procedure;
+- states;
+- preconditions;
+- trigger;
+- required/prohibited behavior;
+- normative strength;
+- exceptions.
+
+Do not merge properties merely because they concern the same:
+
+- timer;
+- message;
+- state;
+- procedure;
+- security category.
+
+If merging may lose meaningful security semantics:
+
+    KEEP THEM SEPARATE.
+
+Related properties may instead be linked using:
+
+- depends_on;
+- prerequisite_for;
+- reinforces;
+- exception_to;
+- complements;
+- overlaps_without_merging.
+
+======================================================================
+11. EVIDENCE PROVENANCE — STRICT
+======================================================================
+
+Evidence provenance is a HARD OUTPUT REQUIREMENT.
+
+For every item in:
+
+    evidence.original_chunk
+
+the value of:
+
+    text
+
+MUST be copied verbatim from the supplied chunk's `text` field.
+
+Each `evidence.original_chunk[].text` value MUST satisfy ALL of the following:
+
+1. It MUST be one contiguous excerpt from the supplied chunk's `text` field.
+
+2. Copy the wording exactly as it appears in the source.
+
+3. Do NOT:
+
+   - paraphrase;
+   - summarize;
+   - rewrite;
+   - shorten by replacing omitted text with "...";
+   - add ellipses;
+   - combine non-contiguous source fragments;
+   - alter punctuation;
+   - add words;
+   - remove words;
+   - change SHALL/MAY/SHOULD or any other normative term;
+   - add clause numbers;
+   - add labels;
+   - add explanations;
+   - add annotations;
+   - add quotation marks unless they are literally present in the source
+     `text` field.
+
+4. Whitespace differences are acceptable only to the extent that whitespace is
+   normalized by the validator.
+
+All lexical content and punctuation must otherwise match the source.
+
+5. If two separate parts of the source support one SP but are not contiguous,
+   return them as TWO separate evidence objects.
+
+CORRECT:
+
+    "original_chunk": [
+      {
+        "text": "<first exact contiguous source excerpt>"
+      },
+      {
+        "text": "<second exact contiguous source excerpt>"
+      }
+    ]
+
+INCORRECT:
+
+    "original_chunk": [
+      {
+        "text": "<first source fragment> ... <second source fragment>"
+      }
+    ]
+
+6. Never place text retrieved through semantic/file search inside:
+
+    evidence.original_chunk
+
+Retrieved text from TS 24.501 belongs only in:
+
+    evidence.retrieved_ts24501
+
+Retrieved evidence from another specification belongs only in:
+
+    evidence.retrieved_cross_document
+
+7. If a Security Property is supported only by retrieved context and there is no
+   exact contiguous excerpt from the supplied chunk that supports it, return:
+
+    "original_chunk": []
+
+Do NOT manufacture an original-chunk excerpt.
+
+8. Prefer the smallest useful exact contiguous excerpt that preserves the
+   evidence needed to support the property.
+
+A full sentence or several contiguous sentences may be used when necessary to
+preserve:
+
+- condition;
+- branch semantics;
+- normative meaning;
+- exception;
+- security consequence.
+
+9. Do not copy metadata into original_chunk evidence unless that metadata
+   literally appears inside the source `text` field.
+
+For example:
+
+- chunk ID;
+- section number;
+- generated segmentation label;
+- title;
+
+must not be inserted into evidence text unless literally present in the source
+`text`.
+
+10. Before producing the final JSON, perform an evidence provenance check.
+
+For EVERY:
+
+    evidence.original_chunk[].text
+
+verify that the excerpt occurs verbatim inside the supplied chunk's `text` field
+after whitespace normalization.
+
+If the check would fail:
+
+    either replace it with the correct exact source excerpt
+
+or:
+
+    remove it from original_chunk.
+
+This requirement has priority over stylistic readability.
+
+======================================================================
+FEW-SHOT GUIDANCE
+======================================================================
+
+Example 1 — Conditional integrity rule
+--------------------------------------
+
+Reconstructed meaning:
+
+A message normally requires successful integrity verification before its
+security-sensitive effects are accepted, but an explicit pre-security exception
+exists.
+
+Good SP:
+
+"Security-sensitive effects of the message shall occur only after successful
+integrity verification, except under the explicitly permitted pre-security
+condition."
+
+Avoid:
+
+"All NAS messages shall always be integrity protected."
+
+Evidence rule:
+
+The original_chunk evidence must be copied exactly from the source text. Do not
+rewrite the original clause into the wording of the SP.
+
+----------------------------------------------------------------------
+Example 2 — Timer/retransmission behavior
+----------------------------------------------------------------------
+
+Reconstructed meaning:
+
+A procedure retransmits according to timer T, allows limited retries, and
+performs recovery after exhaustion.
+
+Possible SPs:
+
+SP-A:
+"Retransmission shall obey the specified timer and retry constraints."
+
+SP-B:
+"Exhaustion of permitted retransmission attempts shall trigger the specified
+failure or recovery behavior rather than indefinite continuation."
+
+Keep them separate if merging loses the distinction.
+
+If different source sentences support SP-A and SP-B, preserve them as separate
+exact evidence excerpts.
+
+----------------------------------------------------------------------
+Example 3 — Conditional permission
+----------------------------------------------------------------------
+
+Meaning:
+
+    The UE MAY perform X when condition C holds.
+    Otherwise another branch applies.
+
+Possible SP:
+
+"Action X shall remain restricted to the conditions under which the
+specification explicitly permits it."
+
+Do NOT rewrite MAY as SHALL in the evidence.
+
+The SP may abstract the security meaning, but the evidence itself must remain
+verbatim.
+
+======================================================================
+FINAL CHECK
+======================================================================
+
+Before returning the result, confirm that:
+
+1. the chunk was not incorrectly treated as self-contained;
+
+2. its parent procedure/rule was considered;
+
+3. relevant branches and conditions were reconstructed;
+
+4. important cross-references were resolved where possible;
+
+5. states and transitions were considered;
+
+6. timers were considered;
+
+7. counters, sequence values, identifiers, and freshness mechanisms were
+   considered where relevant;
+
+8. failure, abort, reject, exception, and recovery paths were considered;
+
+9. SHALL/MAY/SHOULD semantics were preserved;
+
+10. AND/OR/NOT semantics were preserved;
+
+11. CIAA and relevant adversarial dimensions were considered;
+
+12. no unsupported SP was created;
+
+13. no important SP was lost through over-generalization;
+
+14. related but distinct SPs were not incorrectly merged;
+
+15. every original_chunk evidence item is a VERBATIM CONTIGUOUS source excerpt;
+
+16. no original_chunk evidence contains ellipses unless the literal source
+    contains them;
+
+17. no original_chunk evidence combines non-contiguous source fragments;
+
+18. no original_chunk evidence modifies punctuation or normative wording;
+
+19. retrieved evidence was not misclassified as original_chunk evidence;
+
+20. an empty original_chunk array was used when no exact local evidence exists;
+
+21. unresolved dependencies were explicitly reported.
+
+======================================================================
+OUTPUT
+======================================================================
+
+Return VALID JSON ONLY.
+
+Do not include Markdown, explanations, comments, or text outside the JSON.
+
+{
+  "chunk_analysis": {
+    "source_document": "3GPP TS 24.501 V17.9.0",
+    "chunk_id": "<if available or null>",
+    "section": "<if identifiable or null>",
+    "title": "<if identifiable or null>",
+
+    "chunk_security_relevance":
+      "high | medium | low | none",
+
+    "chunk_role":
+      "complete_rule | procedure_step | conditional_branch |
+       alternative_branch | exception | failure_path |
+       recovery_path | retransmission_path | continuation |
+       list_item | other",
+
+    "parent_procedure":
+      "<procedure or null>",
+
+    "context_reconstruction_status":
+      "complete | mostly_complete | incomplete",
+
+    "unresolved_dependencies": [
+      "<unresolved reference, condition, state, procedure, term, etc.>"
+    ]
+  },
+
+  "retrieval_summary": {
+    "retrieval_performed": true,
+
+    "retrieval_topics": [
+      "<parent procedure>",
+      "<cross reference>",
+      "<state>",
+      "<timer>",
+      "<condition>",
+      "<security context>",
+      "<message>",
+      "<exception>"
+    ],
+
+    "resolved_references": [
+      {
+        "reference": "<reference>",
+        "source_document": "<3GPP TS>",
+        "section": "<section>",
+        "purpose": "<why retrieved>"
+      }
+    ]
+  },
+
+  "reconstructed_context": {
+    "summary":
+      "<organized reconstruction of the relevant behavior>",
+
+    "entities": [
+      "<entity>"
+    ],
+
+    "preconditions": [
+      "<precondition>"
+    ],
+
+    "states": [
+      "<state>"
+    ],
+
+    "messages_or_events": [
+      "<message/event>"
+    ],
+
+    "timers_counters_freshness": [
+      "<timer/counter/freshness mechanism>"
+    ],
+
+    "security_context_conditions": [
+      "<security-context condition>"
+    ],
+
+    "security_checks": [
+      "<validation/security check>"
+    ],
+
+    "exceptions": [
+      "<exception>"
+    ],
+
+    "failure_or_recovery_behavior": [
+      "<behavior>"
+    ]
+  },
+
+  "procedure_structure": {
+    "controlling_conditions": [
+      "<condition>"
+    ],
+
+    "branches": [
+      {
+        "branch_id": "B1",
+
+        "condition":
+          "<branch condition>",
+
+        "normative_strength":
+          "shall | shall_not | should | should_not |
+           may | conditional | mixed",
+
+        "behavior":
+          "<required/permitted/prohibited behavior>",
+
+        "resulting_effect":
+          "<state/procedure/security consequence>"
+      }
+    ]
+  },
+
+  "sp_set": {
+    "security_property_count": <number>,
+
+    "security_properties": [
+      {
+        "property_id": "SP-01",
+
+        "property_name":
+          "<short descriptive label>",
+
+        "security_property":
+          "<precise Security Property statement>",
+
+        "category": [
+          "<confidentiality | integrity | availability | authenticity |
+             authentication | authorization | replay_freshness |
+             identity_privacy | state_transition | timer_control |
+             message_ordering | key_management | security_context |
+             input_validation | procedure_enforcement | other>"
+        ],
+
+        "security_objectives": [
+          "<Confidentiality | Integrity | Availability | Authenticity>"
+        ],
+
+        "scope": {
+          "entities": [
+            "<entity>"
+          ],
+
+          "procedure":
+            "<procedure or null>",
+
+          "messages": [
+            "<message>"
+          ],
+
+          "states": [
+            "<state>"
+          ]
+        },
+
+        "preconditions": [
+          "<condition>"
+        ],
+
+        "trigger":
+          "<event/condition or null>",
+
+        "required_behavior":
+          "<behavior or null>",
+
+        "prohibited_behavior":
+          "<behavior or null>",
+
+        "exceptions_or_qualifiers": [
+          "<exception or qualification>"
+        ],
+
+        "normative_basis": [
+          "<shall | shall_not | should | should_not |
+             may | conditional | derived_from_multiple_rules>"
+        ],
+
+        "adversarial_relevance":
+          "<brief explanation of why violation of this property matters under
+           adversarial or abnormal behavior>",
+
+        "evidence": {
+          "original_chunk": [
+            {
+              "text":
+                "<VERBATIM contiguous excerpt copied directly from the supplied chunk text field>"
+            }
+          ],
+
+          "retrieved_ts24501": [
+            {
+              "section":
+                "<section>",
+
+              "text":
+                "<retrieved supporting text; never place this in original_chunk>"
+            }
+          ],
+
+          "retrieved_cross_document": [
+            {
+              "document":
+                "<3GPP TS>",
+
+              "section":
+                "<section>",
+
+              "text":
+                "<retrieved supporting text; never place this in original_chunk>"
+            }
+          ]
+        },
+
+        "derivation":
+          "<concise explanation of how the evidence jointly establishes the SP>",
+
+        "confidence":
+          "high | medium | low"
+      }
+    ],
+
+    "property_relations": [
+      {
+        "source_property":
+          "<SP-ID>",
+
+        "relation":
+          "depends_on | prerequisite_for | reinforces |
+           exception_to | complements | overlaps_without_merging",
+
+        "target_property":
+          "<SP-ID>",
+
+        "explanation":
+          "<brief explanation>"
+      }
+    ]
+  },
+
+  "coverage_assessment": {
+    "confidentiality": {
+      "status":
+        "supported | considered_not_supported",
+
+      "sp_ids": [
+        "<SP-ID>"
+      ]
+    },
+
+    "integrity": {
+      "status":
+        "supported | considered_not_supported",
+
+      "sp_ids": [
+        "<SP-ID>"
+      ]
+    },
+
+    "availability": {
+      "status":
+        "supported | considered_not_supported",
+
+      "sp_ids": [
+        "<SP-ID>"
+      ]
+    },
+
+    "authenticity": {
+      "status":
+        "supported | considered_not_supported",
+
+      "sp_ids": [
+        "<SP-ID>"
+      ]
+    },
+
+    "adversarial_dimensions_considered": [
+      "<replay>",
+      "<duplication>",
+      "<message injection>",
+      "<invalid state>",
+      "<timer abuse>",
+      "<procedure collision>"
+    ],
+
+    "possible_missing_context":
+      "<none or concise explanation>"
+  }
+}
+
+======================================================================
+SPECIAL CASE — NO SECURITY PROPERTY
+======================================================================
+
+It is valid for a chunk to produce zero Security Properties.
+
+If, after reconstructing its relevant context, the chunk is purely descriptive,
+editorial, formatting-related, or operational and does not support a meaningful
+security-relevant invariant or constraint:
+
+- do not manufacture an SP;
+- return:
+
+    "security_property_count": 0
+
+- return:
+
+    "security_properties": []
+
+- explain briefly in reconstructed_context.summary why no grounded SP was found.
+
+======================================================================
+SPECIAL CASE — NO LOCAL ORIGINAL-CHUNK EVIDENCE
+======================================================================
+
+A Security Property may sometimes depend primarily on retrieved context.
+
+If the property is relevant to understanding the supplied chunk but no exact
+contiguous excerpt from the chunk's source `text` field directly supports that
+property, return:
+
+    "original_chunk": []
+
+and place the supporting retrieved evidence only in the appropriate retrieval
+evidence arrays.
+
+Do NOT create a paraphrased local excerpt merely to avoid an empty array.
+
+======================================================================
+INPUT
+======================================================================
+
+{{chunk_text}}

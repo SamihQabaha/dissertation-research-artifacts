@@ -1,0 +1,945 @@
+{
+  "name": "nas_chunk_security_finding_analysis_v4",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "segment": {
+        "type": "object",
+        "properties": {
+          "chunk_id": {
+            "type": "string"
+          },
+          "source_document": {
+            "type": "string"
+          },
+          "section_number": {
+            "type": "string"
+          },
+          "section_title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "chunk_id",
+          "source_document",
+          "section_number",
+          "section_title"
+        ],
+        "additionalProperties": false
+      },
+      "context_reconstruction": {
+        "type": "object",
+        "properties": {
+          "local_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "evidence_id": {
+                  "type": "string"
+                },
+                "section": {
+                  "type": "string"
+                },
+                "excerpt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "evidence_id",
+                "section",
+                "excerpt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "local_rule_branches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rule_id": {
+                  "type": "string"
+                },
+                "condition": {
+                  "type": "string"
+                },
+                "modality": {
+                  "type": "string",
+                  "enum": [
+                    "shall",
+                    "shall_not",
+                    "should",
+                    "should_not",
+                    "may",
+                    "descriptive",
+                    "other"
+                  ]
+                },
+                "action": {
+                  "type": "string"
+                },
+                "resulting_state_or_effect": {
+                  "type": "string"
+                },
+                "alternatives": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "exceptions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "cross_references": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "local_evidence_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "rule_id",
+                "condition",
+                "modality",
+                "action",
+                "resulting_state_or_effect",
+                "alternatives",
+                "exceptions",
+                "cross_references",
+                "local_evidence_ids"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "retrieved_dependencies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dependency_id": {
+                  "type": "string"
+                },
+                "source_file": {
+                  "type": "string"
+                },
+                "clause": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "precondition",
+                    "supporting_behavior",
+                    "guard",
+                    "closing_control",
+                    "impact",
+                    "state_transition",
+                    "exception",
+                    "recovery",
+                    "lifecycle",
+                    "security_objective",
+                    "cross_document_constraint",
+                    "other"
+                  ]
+                },
+                "relationship": {
+                  "type": "string"
+                },
+                "applies_to_rule_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "excerpt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "dependency_id",
+                "source_file",
+                "clause",
+                "role",
+                "relationship",
+                "applies_to_rule_ids",
+                "excerpt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "unresolved_context": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "local_evidence",
+          "local_rule_branches",
+          "retrieved_dependencies",
+          "unresolved_context"
+        ],
+        "additionalProperties": false
+      },
+      "branch_assessments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "assessment_id": {
+              "type": "string"
+            },
+            "rule_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "security_focus": {
+              "type": "object",
+              "properties": {
+                "objects_or_state": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "security_objectives": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "objects_or_state",
+                "security_objectives"
+              ],
+              "additionalProperties": false
+            },
+            "grounded_security_expectation": {
+              "type": "string"
+            },
+            "expectation_basis": {
+              "type": "string",
+              "enum": [
+                "local_normative",
+                "retrieved_same_procedure",
+                "cross_procedure",
+                "cross_document",
+                "distributed_inference",
+                "none_required"
+              ]
+            },
+            "result": {
+              "type": "string",
+              "enum": [
+                "secure",
+                "adverse",
+                "weakened",
+                "ambiguous",
+                "insufficient_evidence",
+                "not_security_relevant"
+              ]
+            },
+            "result_basis": {
+              "type": "string",
+              "enum": [
+                "local_enforcement",
+                "mandatory_same_branch_compensation",
+                "explicit_bounded_exception",
+                "contradictory_branch",
+                "partial_or_optional_control",
+                "normative_ambiguity",
+                "missing_context",
+                "no_material_security_effect"
+              ]
+            },
+            "reason": {
+              "type": "string"
+            },
+            "branch_traces": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "trace_id": {
+                    "type": "string"
+                  },
+                  "rule_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "condition": {
+                    "type": "string"
+                  },
+                  "modality": {
+                    "type": "string"
+                  },
+                  "permitted_or_required_action": {
+                    "type": "string"
+                  },
+                  "resulting_state_or_effect": {
+                    "type": "string"
+                  },
+                  "grounded_security_expectation": {
+                    "type": "string"
+                  },
+                  "security_conflict_or_risk": {
+                    "type": "string"
+                  },
+                  "consequence_support": {
+                    "type": "string",
+                    "enum": [
+                      "direct_normative",
+                      "supported_derived",
+                      "conditional_external",
+                      "speculative"
+                    ]
+                  },
+                  "local_evidence_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "retrieved_dependency_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "trace_id",
+                  "rule_ids",
+                  "condition",
+                  "modality",
+                  "permitted_or_required_action",
+                  "resulting_state_or_effect",
+                  "grounded_security_expectation",
+                  "security_conflict_or_risk",
+                  "consequence_support",
+                  "local_evidence_ids",
+                  "retrieved_dependency_ids"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "exception_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "weakness_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "candidate_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "local_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retrieved_dependency_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "support": {
+              "type": "object",
+              "properties": {
+                "normative_evidence": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "path_reachability": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "security_impact": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                }
+              },
+              "required": [
+                "normative_evidence",
+                "path_reachability",
+                "security_impact"
+              ],
+              "additionalProperties": false
+            },
+            "validation_needs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "independent_specification_verification",
+                  "remote_normative_context",
+                  "actor_reachability",
+                  "implementation_behavior",
+                  "interoperability",
+                  "impact_reproduction",
+                  "repeatability",
+                  "compensating_control"
+                ]
+              }
+            }
+          },
+          "required": [
+            "assessment_id",
+            "rule_ids",
+            "security_focus",
+            "grounded_security_expectation",
+            "expectation_basis",
+            "result",
+            "result_basis",
+            "reason",
+            "branch_traces",
+            "exception_ids",
+            "weakness_ids",
+            "candidate_ids",
+            "local_evidence_ids",
+            "retrieved_dependency_ids",
+            "support",
+            "validation_needs"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "exceptions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "exception_id": {
+              "type": "string"
+            },
+            "rule_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "disposition": {
+              "type": "string",
+              "enum": [
+                "bounded_accepted",
+                "review_required",
+                "unsafe"
+              ]
+            },
+            "legitimate_purpose": {
+              "type": "string"
+            },
+            "entry_conditions": {
+              "type": "string"
+            },
+            "mandatory_bounds": {
+              "type": "string"
+            },
+            "minimum_safety_invariant": {
+              "type": "string"
+            },
+            "residual_security_failure": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "type": "string"
+            },
+            "weakness_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "local_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retrieved_dependency_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "exception_id",
+            "rule_ids",
+            "disposition",
+            "legitimate_purpose",
+            "entry_conditions",
+            "mandatory_bounds",
+            "minimum_safety_invariant",
+            "residual_security_failure",
+            "reason",
+            "weakness_ids",
+            "local_evidence_ids",
+            "retrieved_dependency_ids"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "design_weaknesses": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "weakness_id": {
+              "type": "string"
+            },
+            "rule_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "trace_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "primary_mechanism": {
+              "type": "string",
+              "enum": [
+                "predicate_or_polarity_error",
+                "modality_relaxation",
+                "unsafe_permitted_alternative",
+                "missing_or_incomplete_guard",
+                "deleted_or_incorrect_scope",
+                "incomplete_validation",
+                "overbroad_or_unbounded_exception",
+                "unsafe_state_or_context_transition",
+                "ordering_or_atomicity_failure",
+                "freshness_or_binding_failure",
+                "inadequate_timer_retry_or_recovery_bound",
+                "cross_rule_or_cross_procedure_inconsistency",
+                "unsafe_downgrade_or_fallback",
+                "normative_ambiguity_or_underspecification",
+                "other"
+              ]
+            },
+            "secondary_mechanisms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "affected_area": {
+              "type": "string"
+            },
+            "enabling_behavior": {
+              "type": "string"
+            },
+            "direct_protocol_effect": {
+              "type": "string"
+            },
+            "security_objectives_affected": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "security_impact": {
+              "type": "string"
+            },
+            "consequence_support": {
+              "type": "string",
+              "enum": [
+                "direct_normative",
+                "supported_derived",
+                "conditional_external"
+              ]
+            },
+            "compensating_controls": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  },
+                  "assessment": {
+                    "type": "string",
+                    "enum": [
+                      "closes_path",
+                      "bounds_impact",
+                      "supports_recovery",
+                      "irrelevant",
+                      "uncertain"
+                    ]
+                  },
+                  "rule_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "retrieved_dependency_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "description",
+                  "assessment",
+                  "rule_ids",
+                  "retrieved_dependency_ids"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "support": {
+              "type": "object",
+              "properties": {
+                "normative_evidence": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "path_reachability": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "security_impact": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                }
+              },
+              "required": [
+                "normative_evidence",
+                "path_reachability",
+                "security_impact"
+              ],
+              "additionalProperties": false
+            },
+            "validation_needs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "independent_specification_verification",
+                  "remote_normative_context",
+                  "actor_reachability",
+                  "implementation_behavior",
+                  "interoperability",
+                  "impact_reproduction",
+                  "repeatability",
+                  "compensating_control"
+                ]
+              }
+            },
+            "local_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retrieved_dependency_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "weakness_id",
+            "rule_ids",
+            "trace_ids",
+            "primary_mechanism",
+            "secondary_mechanisms",
+            "affected_area",
+            "enabling_behavior",
+            "direct_protocol_effect",
+            "security_objectives_affected",
+            "security_impact",
+            "consequence_support",
+            "compensating_controls",
+            "support",
+            "validation_needs",
+            "local_evidence_ids",
+            "retrieved_dependency_ids"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "vulnerability_candidates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "candidate_id": {
+              "type": "string"
+            },
+            "candidate_type": {
+              "type": "string",
+              "enum": [
+                "candidate_specification_vulnerability"
+              ]
+            },
+            "weakness_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rule_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "trace_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "actor": {
+              "type": "string"
+            },
+            "actor_capability": {
+              "type": "string"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "uplink",
+                "downlink",
+                "bidirectional",
+                "internal",
+                "unknown"
+              ]
+            },
+            "preconditions": {
+              "type": "string"
+            },
+            "trigger": {
+              "type": "string"
+            },
+            "guards_evaluated": {
+              "type": "string"
+            },
+            "specification_trace": {
+              "type": "string"
+            },
+            "concrete_security_impact": {
+              "type": "string"
+            },
+            "compensating_controls": {
+              "type": "string"
+            },
+            "unresolved_assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "support": {
+              "type": "object",
+              "properties": {
+                "normative_evidence": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "path_reachability": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "security_impact": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                }
+              },
+              "required": [
+                "normative_evidence",
+                "path_reachability",
+                "security_impact"
+              ],
+              "additionalProperties": false
+            },
+            "validation_needs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "independent_specification_verification",
+                  "remote_normative_context",
+                  "actor_reachability",
+                  "implementation_behavior",
+                  "interoperability",
+                  "impact_reproduction",
+                  "repeatability",
+                  "compensating_control"
+                ]
+              }
+            },
+            "local_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retrieved_dependency_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "candidate_id",
+            "candidate_type",
+            "weakness_ids",
+            "rule_ids",
+            "trace_ids",
+            "actor",
+            "actor_capability",
+            "direction",
+            "preconditions",
+            "trigger",
+            "guards_evaluated",
+            "specification_trace",
+            "concrete_security_impact",
+            "compensating_controls",
+            "unresolved_assumptions",
+            "support",
+            "validation_needs",
+            "local_evidence_ids",
+            "retrieved_dependency_ids"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "unresolved_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "analysis_coverage_gaps": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "gap_id": {
+              "type": "string"
+            },
+            "rule_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "security_relevance": {
+              "type": "string"
+            },
+            "unresolved_need": {
+              "type": "string"
+            },
+            "local_evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retrieved_dependency_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "gap_id",
+            "rule_ids",
+            "security_relevance",
+            "unresolved_need",
+            "local_evidence_ids",
+            "retrieved_dependency_ids"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "segment",
+      "context_reconstruction",
+      "branch_assessments",
+      "exceptions",
+      "design_weaknesses",
+      "vulnerability_candidates",
+      "unresolved_questions",
+      "analysis_coverage_gaps"
+    ],
+    "additionalProperties": false
+  }
+}

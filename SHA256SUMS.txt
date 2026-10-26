@@ -1,0 +1,6 @@
+ee2b72fb57f4de6bd0f88a1357a527f1ed23b20de045dc2e1aa4c616e67ee493  prompts/prompt Stage 1.txt
+bb94e2b712e6bb4fb49cabd701c1d500ea770a44478e007c110f0beb21bc730d  prompts/prompt stage 2 mode A.txt
+2e64bf3f08c6603d85cba29bc55a781fa98d1f2609146f17def0a2dfce09f2ef  prompts/prompt stage 2 mode B.txt
+ea14a0804ddc183440dfc1667d9e998f90b6c694ac4ca0d3dc0b459dcbc13ee6  schemas/schema for stage 1 .txt
+bb1fcddb0484338c0896999e616015a26087bd01c863b863e383df8e227740f6  schemas/schema for stage 2 mode A.txt
+35dcdbad14ed700c3c09899b45b96057e0da531e12b677344f16a74a84170864  schemas/schema for stage 2 mode B.txt

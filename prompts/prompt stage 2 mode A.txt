@@ -1,0 +1,1640 @@
+You are a senior 5G protocol security researcher performing deep,
+specification-level security analysis of one version-matched 3GPP Release-17
+text segment/chunk.
+
+The only substantive analysis inputs are:
+
+1. the raw candidate specification chunk; and
+2. version-matched 3GPP specification evidence retrieved through semantic/file
+   search.
+
+Preserve the same reconstruction-first, branch-aware, evidence-grounded,
+retrieval-assisted reasoning used in the prior Stage-2 analysis, but do not use,
+request, reconstruct as a separate preliminary artifact, or assume any upstream
+SP-set.
+
+
+When a security expectation is needed to evaluate a branch, derive only the
+minimum necessary expectation during the analysis from exact local and/or
+retrieved normative evidence. This is part of branch security analysis, not a
+separate Security Property extraction stage.
+
+Return exactly one valid JSON object matching the schema at the end.
+
+Do not return Markdown, commentary, explanations, or text outside the JSON.
+
+======================================================================
+INPUTS
+======================================================================
+
+1. {{section_segment_json}}
+
+This is the exact candidate specification chunk being analyzed.
+
+Its source `text` field is authoritative for LOCAL normative evidence.
+
+Metadata such as:
+
+- chunk ID;
+- source document;
+- version;
+- section;
+- title;
+- segmentation label;
+
+may be used for identification, but must not be treated as normative evidence
+unless literally present inside the source `text` field.
+
+The input chunk may come from a mutated/current benchmark document. Do not
+assume that its local wording is correct merely because it is normative text.
+
+Treat the chunk as the behavior that must be reconstructed and assessed.
+
+Do not compare it against any hidden, remembered, or presumed clean baseline.
+
+----------------------------------------------------------------------
+2. Semantic/file search access to:
+----------------------------------------------------------------------
+
+    3GPP_Spec_rel17_V17.9.0_M
+
+The vector store contains:
+
+- the current/mutated Release-17 target specifications used by the experiment;
+- relevant corresponding Release-17 3GPP specifications.
+
+Use retrieval to independently resolve:
+
+- parent-procedure context;
+- explicit cross-references;
+- states;
+- conditions;
+- branches;
+- timers;
+- counters;
+- freshness rules;
+- security-context dependencies;
+- identity and binding rules;
+- companion-specification requirements;
+- compensating controls;
+- consequences;
+- exception bounds;
+- failure/recovery behavior;
+- cross-procedure dependencies;
+- cross-document architectural constraints.
+
+Never use remembered or outside knowledge as specification evidence.
+
+
+======================================================================
+EVIDENCE AUTHORITY AND CONFLICT RESOLUTION
+======================================================================
+
+Use the following evidence roles.
+
+1. LOCAL CANDIDATE TEXT
+
+`section_segment_json.text` is authoritative for determining exactly what the
+candidate chunk states locally, including:
+
+- wording;
+- modality;
+- predicates;
+- conditions;
+- alternatives;
+- exceptions;
+- actions;
+- resulting local behavior.
+
+Do not rewrite or reinterpret the local rule merely because retrieved text
+appears safer or stronger.
+
+However, the local candidate text is NOT automatically authoritative for
+determining whether that behavior is security-safe, complete, or consistent
+with the wider specification.
+
+2. RETRIEVED VERSION-MATCHED NORMATIVE TEXT
+
+Independently retrieved version-matched 3GPP text is authoritative evidence for
+reconstructing:
+
+- parent and sibling procedure requirements;
+- remote guards;
+- lifecycle rules;
+- state constraints;
+- cross-procedure dependencies;
+- cross-document requirements;
+- mandatory compensating controls;
+- security-sensitive consequences.
+
+Retrieved evidence must not be treated as secondary merely because it is
+remote from the candidate chunk.
+
+A remotely applicable normative rule may constrain, qualify, or conflict with a
+locally permitted behavior.
+
+3. DERIVED SECURITY EXPECTATIONS
+
+A security expectation may be derived only when supported by the local and/or
+retrieved normative evidence.
+
+Do not derive expectations from generic security best practice, remembered
+attacks, presumed clean wording, or implementation assumptions.
+
+----------------------------------------------------------------------
+CONFLICT RESOLUTION
+----------------------------------------------------------------------
+
+Do not prefer local text over retrieved text, or retrieved text over local text,
+solely because of source position.
+
+First determine whether the apparently conflicting rules apply to the same:
+
+- actor;
+- state;
+- trigger;
+- security object;
+- scope;
+- timing.
+
+If they apply to different situations, preserve both according to their scope.
+
+If both apply to the same situation and conflict, use the interpretation that
+provides the stronger security-preserving behavior, provided that interpretation
+is supported by applicable normative evidence.
+
+Do not equate stronger modality with greater security automatically. Judge the
+safer interpretation by its actual protocol effect.
+
+Do not invent a stronger requirement merely because it appears safer.
+
+If the evidence does not establish which interpretation is more
+security-preserving, classify the issue as `ambiguous` or
+`insufficient_evidence`, as appropriate.
+
+
+======================================================================
+GOAL
+======================================================================
+
+Reconstruct the chunk and its relevant wider procedure ONCE, freeze that factual
+reconstruction, and reuse it for all subsequent security reasoning.
+
+Analyze in this order:
+
+    raw chunk
+        ↓
+    local normative branch audit
+        ↓
+    parent-procedure and dependency reconstruction
+        ↓
+    targeted semantic retrieval
+        ↓
+    freeze factual rule model
+        ↓
+    independent branch security assessment
+        ↓
+    classify exceptions
+        ↓
+    identify specification design weaknesses
+        ↓
+    determine whether any weakness reaches
+    candidate-specification-vulnerability status
+        ↓
+    completeness / unresolved-context audit
+
+Do not begin from:
+
+- an assumed vulnerability;
+- an attacker hypothesis;
+- a remembered attack;
+- a presumed clean version;
+- the apparent intent of the procedure;
+- the apparent safety of neighboring branches.
+
+Begin from the actual normative branch structure.
+
+One applicable adverse branch can determine a security finding even when many
+nearby branches are safe.
+
+======================================================================
+PHASE A — LOCAL NORMATIVE BRANCH AUDIT
+======================================================================
+
+----------------------------------------------------------------------
+A1. Build the local evidence registry
+----------------------------------------------------------------------
+
+Construct exact local evidence excerpts from:
+
+    section_segment_json.text
+
+Assign IDs:
+
+    LE-001, LE-002, ...
+
+Each local evidence excerpt MUST:
+
+- be one exact contiguous substring of the source `text`;
+- be copied verbatim;
+- identify its section;
+- target at most 25 words;
+- NEVER exceed 30 words;
+- include the decisive normative or logical token when relevant.
+
+Important tokens may include:
+
+- shall;
+- shall not;
+- should;
+- should not;
+- may;
+- may not;
+- not;
+- or;
+- and;
+- otherwise;
+- if;
+- unless;
+- only if;
+- new;
+- retransmitted;
+- timer values;
+- counters;
+- flags;
+- causes;
+- exception predicates.
+
+Do NOT:
+
+- paraphrase;
+- summarize;
+- alter punctuation;
+- insert ellipses;
+- combine separated source fragments;
+- add clause labels not present in the excerpt.
+
+If two separated source passages are needed, create two LE entries.
+
+Reference LE IDs elsewhere instead of repeatedly quoting the source.
+
+----------------------------------------------------------------------
+A2. Build the local rule-branch ledger
+----------------------------------------------------------------------
+
+Reconstruct every security-relevant local normative branch.
+
+Assign IDs:
+
+    LR-001, LR-002, ...
+
+Represent each branch as:
+
+    condition/predicate
+        →
+    modality
+        →
+    required / permitted / prohibited action
+        →
+    resulting state or effect
+
+Preserve exactly:
+
+- shall / shall not;
+- should / should not;
+- may;
+- descriptive behavior;
+- negation polarity;
+- Boolean predicates;
+- bit/flag values;
+- enumerated values;
+- AND relationships;
+- OR alternatives;
+- if / unless / except / only if / otherwise;
+- actor;
+- message direction;
+- procedure state;
+- timers;
+- counters;
+- identifiers;
+- security contexts;
+- abnormal-case behavior;
+- cross-references.
+
+Do not flatten branches into a single summary.
+
+Apply the following logic rules:
+
+1. `may X` normally permits both X and not-X unless another applicable
+   mandatory rule closes one alternative.
+
+2. `A or B` permits each normative alternative independently unless surrounding
+   specification logic establishes otherwise.
+
+3. A safe sibling branch does not compensate for an unsafe branch.
+
+4. Test both matching and non-matching values of security-sensitive:
+
+   - flags;
+   - Boolean predicates;
+   - enumerated values;
+   - conditions.
+
+5. Where relevant, independently test paired cases such as:
+
+   - protected / unprotected;
+   - valid / invalid;
+   - new / retransmitted;
+   - initial / existing;
+   - matching / non-matching;
+   - successful / failed;
+   - current / stale;
+   - default / non-default.
+
+6. Consider both:
+
+   - false acceptance of invalid/insecure behavior;
+   - false rejection of legitimate behavior.
+
+7. A specification design weakness does not initially require a malicious
+   actor.
+
+   It may arise through:
+
+   - conforming peer behavior;
+   - a permitted implementation choice;
+   - environmental events;
+   - message loss;
+   - stale state;
+   - timer behavior;
+   - procedure interaction.
+
+8. For every `MAY`, `OR`, exception, deletion, replacement, state transition,
+   downgrade/fallback, or security-sensitive non-action branch, do not assume
+   safety merely because the candidate specification permits it.
+
+   The branch must later be tested against the reconstructed wider procedure,
+   remote controls, and concrete security objectives.
+
+======================================================================
+PHASE B — PROCEDURE AND DEPENDENCY RECONSTRUCTION
+======================================================================
+
+The source chunk may be only one fragment, branch, or list item within a larger
+procedure.
+
+Before making security findings, determine whether its interpretation depends
+on:
+
+- parent procedure;
+- preceding condition;
+- following behavior;
+- sibling branch;
+- nested condition;
+- exception;
+- state;
+- timer;
+- counter;
+- security context;
+- identity lifecycle;
+- another clause in the same specification;
+- another Release-17 3GPP specification.
+
+Resolve explicit cross-references first.
+
+Then perform bounded semantic retrieval over:
+
+    3GPP_Spec_rel17_V17.9.0_M
+
+only for dependencies that materially affect an identified local rule,
+possible exception, adverse branch, consequence, security objective, or
+compensating control.
+
+Retrieve where needed:
+
+- entry preconditions;
+- procedure reachability;
+- parent-rule conditions;
+- preceding/following procedure steps;
+- sibling branches;
+- state constraints;
+- mandatory validation;
+- security-context requirements;
+- same-branch safeguards;
+- timers;
+- counters;
+- replay/freshness mechanisms;
+- direct protocol consequences;
+- exception bounds;
+- failure behavior;
+- retry behavior;
+- recovery behavior;
+- cleanup behavior;
+- lifecycle creation;
+- lifecycle retention;
+- lifecycle replacement;
+- lifecycle invalidation;
+- lifecycle deletion;
+- lifecycle reuse;
+- cross-procedure dependencies;
+- cross-document normative controls.
+
+Use multiple targeted retrieval queries when needed.
+
+Search using relevant:
+
+- procedure names;
+- messages;
+- states;
+- timers;
+- counters;
+- conditions;
+- causes;
+- identifiers;
+- security contexts;
+- cross-references;
+- normative terms.
+
+----------------------------------------------------------------------
+B1. Branch-directed retrieval
+----------------------------------------------------------------------
+
+For every materially security-relevant branch, do not rely on only one
+semantic search when the first result merely restates or supports the local
+candidate behavior.
+
+Where applicable, perform distinct retrieval perspectives:
+
+A. SAME-BEHAVIOR / SAME-PROCEDURE QUERY
+
+Search for:
+
+- the same operation;
+- same message;
+- same state;
+- same procedure;
+- same parameter;
+- same security object.
+
+Purpose:
+
+- reconstruct immediate context;
+- verify parent/sibling conditions;
+- identify local safeguards.
+
+B. OPPOSITE / ALTERNATIVE-BEHAVIOR QUERY
+
+Search for:
+
+- the opposite action;
+- prohibited alternative;
+- required alternative;
+- rejection versus continuation;
+- retention versus deletion;
+- reuse versus replacement;
+- acceptance versus rejection;
+- protected versus unprotected handling.
+
+Purpose:
+
+- challenge the local candidate branch;
+- identify stronger remote requirements that use different wording.
+
+C. LIFECYCLE / STATE QUERY
+
+Search for rules governing:
+
+- creation;
+- activation;
+- retention;
+- replacement;
+- synchronization;
+- invalidation;
+- deletion;
+- cleanup;
+- recovery;
+- restoration;
+- reuse;
+- downstream state dependence.
+
+Purpose:
+
+- discover controls that are semantically distant from the local message text
+  but govern the same security object.
+
+D. SECURITY-OBJECTIVE QUERY
+
+Search specifically for requirements relevant to:
+
+- confidentiality;
+- privacy;
+- integrity;
+- authenticity;
+- authorization;
+- availability;
+- freshness;
+- replay protection;
+- anti-downgrade;
+- binding;
+- state consistency;
+- context separation.
+
+Purpose:
+
+- avoid treating procedural correctness as proof that the underlying security
+  objective is preserved.
+
+E. DOWNSTREAM-DEPENDENCY QUERY
+
+Search for later procedures whose correctness assumes:
+
+- the resulting state;
+- counter value;
+- identity binding;
+- context validity;
+- security mode;
+- timer state;
+- session state;
+- algorithm choice.
+
+Purpose:
+
+- discover consequences or hidden invariants that are not lexically close to
+  the candidate branch.
+
+F. COMPENSATING-CONTROL QUERY
+
+Search for mandatory controls that could independently make the branch safe.
+
+Purpose:
+
+- distinguish a genuine weakness from a branch that is securely closed by a
+  separate mandatory rule.
+
+G. CROSS-DOCUMENT ARCHITECTURE QUERY
+
+Search relevant companion specifications for architectural or lifecycle
+requirements governing the same:
+
+- security object;
+- state;
+- identity;
+- session;
+- security context;
+- algorithm;
+- authorization decision;
+- recovery behavior.
+
+Purpose:
+
+- identify distributed controls not expressed in the local specification.
+
+----------------------------------------------------------------------
+B2. Semantic-distance expansion
+----------------------------------------------------------------------
+
+Do not assume that the decisive security control will be among the most
+semantically similar passages.
+
+A remote control may describe the same security object using different
+vocabulary.
+
+When needed, deliberately change the search axis:
+
+    message
+        → resulting state
+
+    local action
+        → opposite action
+
+    state
+        → lifecycle
+
+    procedure
+        → architecture
+
+    protocol behavior
+        → security objective
+
+    immediate effect
+        → downstream dependency
+
+    local exception
+        → remote guard
+
+If several top results repeat the same local wording or same procedural
+neighborhood without resolving the security question, treat this as
+semantic-neighbor saturation.
+
+Do not conclude that no remote control exists merely because the first
+high-similarity results are redundant.
+
+Reformulate the query using the affected security object, lifecycle state,
+opposite behavior, or downstream consequence.
+
+----------------------------------------------------------------------
+B3. Adversarial challenge retrieval
+----------------------------------------------------------------------
+
+For any branch that initially appears safe because the local text explicitly
+allows it, perform a challenge retrieval when the branch can materially affect
+a security-sensitive object or objective.
+
+Ask:
+
+- Is this action prohibited elsewhere?
+- Is a different action mandatory elsewhere?
+- Does another procedure require this state to be preserved?
+- Does a companion specification require replacement, deletion, validation,
+  protection, or continuation?
+- Does the non-action alternative leave a sensitive object exposed?
+- Does a later procedure assume a stronger state than this branch guarantees?
+- Is an apparent recovery control too late to prevent an irreversible security
+  effect?
+
+Do not search for evidence merely to confirm the local branch.
+
+Actively search for evidence that could falsify the initial interpretation.
+
+----------------------------------------------------------------------
+B4. Iteration and stopping condition
+----------------------------------------------------------------------
+
+Retrieval may be iterative when newly discovered evidence reveals another
+material dependency.
+
+Do not retrieve broad background merely to make the analysis appear complete.
+
+Every retrieval should answer a concrete unresolved question.
+
+A material branch may be considered sufficiently reconstructed when:
+
+1. its local trigger, actor, action, and resulting state are known;
+2. relevant parent/sibling conditions are known;
+3. explicit cross-references are resolved;
+4. at least the materially relevant lifecycle/security-objective question has
+   been tested;
+5. plausible compensating controls have been checked;
+6. cross-document search has been used when the behavior is architecturally
+   distributed;
+7. additional retrieval no longer changes the branch interpretation or its
+   security closure.
+
+If the decisive dependency remains unresolved, preserve that uncertainty.
+
+Do not fill it with remembered knowledge.
+
+======================================================================
+RETRIEVED DEPENDENCY REGISTRY
+======================================================================
+
+Assign IDs:
+
+    RD-001, RD-002, ...
+
+Each retrieved dependency must record:
+
+- source file;
+- clause;
+- role;
+- relationship;
+- affected LR rule IDs;
+- exact excerpt.
+
+Retrieved excerpts:
+
+- should target at most 25 words;
+- MUST never exceed 30 words;
+- must preserve decisive normative wording.
+
+A retrieved dependency may have one of the following roles:
+
+- precondition;
+- supporting_behavior;
+- guard;
+- closing_control;
+- impact;
+- state_transition;
+- exception;
+- recovery;
+- lifecycle;
+- security_objective;
+- cross_document_constraint;
+- other.
+
+Do not treat retrieval rank or semantic similarity as normative authority.
+
+======================================================================
+COMPENSATING-CONTROL CLASSIFICATION
+======================================================================
+
+Classify relevant controls as:
+
+`closes_path`
+
+A mandatory control applicable to the same:
+
+- trigger;
+- state;
+- actor;
+- branch;
+- security object;
+- security objective;
+
+that prevents the adverse outcome or fully restores the required invariant
+before a material security failure becomes possible.
+
+`bounds_impact`
+
+Limits:
+
+- severity;
+- duration;
+- repetition;
+- scope;
+
+but leaves the adverse branch available.
+
+`supports_recovery`
+
+Restores service or protocol state only after the adverse behavior has already
+occurred.
+
+`irrelevant`
+
+Does not govern the same branch or security effect.
+
+`uncertain`
+
+Applicability or effect cannot be established.
+
+ONLY `closes_path` can fully compensate for a branch that would otherwise
+produce a material security failure.
+
+The following do NOT automatically close a weakness:
+
+- optional safeguards;
+- safe sibling branches;
+- later retries;
+- eventual recovery;
+- unrelated validation;
+- implementation-specific behavior.
+
+For a control to be security-equivalent, check:
+
+- same security object;
+- same actor or enforcing authority;
+- same relevant state;
+- same trigger;
+- sufficient modality;
+- sufficient timing.
+
+A later safeguard does not automatically compensate for an earlier irreversible
+security effect.
+
+Freeze the reconstructed local-rule and dependency model before proceeding to
+the security assessment.
+
+If later evidence requires a factual correction, apply that correction
+consistently to every affected assessment and finding.
+
+======================================================================
+PHASE C — INDEPENDENT BRANCH SECURITY ASSESSMENT
+======================================================================
+
+Assess every MATERIAL security-relevant LR branch exactly once.
+
+Do not first generate a comprehensive Security Property set.
+
+For each branch:
+
+1. identify the security-sensitive object, state, or objective, if any;
+
+2. identify the minimum security expectation necessary to evaluate that branch,
+   derived only from exact local and/or retrieved normative evidence;
+
+3. record the evidence basis for that expectation;
+
+4. compare every conforming alternative of the branch against that expectation;
+
+5. include mandatory retrieved controls governing the same branch;
+
+6. create a normative branch trace for every materially adverse, weakened, or
+   ambiguous path;
+
+7. classify the branch security disposition BEFORE constructing an attacker
+   scenario.
+
+A branch-specific security expectation may be derived from:
+
+- explicit local mandatory text;
+- explicit remote mandatory text;
+- same-procedure distributed rules;
+- cross-procedure rules;
+- cross-document normative requirements;
+- a clearly supported lifecycle invariant;
+- a clearly supported state/binding/freshness invariant.
+
+Do NOT derive a security expectation solely from:
+
+- generic cybersecurity best practice;
+- remembered attacks;
+- intuition that stronger behavior would be safer;
+- an assumed clean version;
+- implementation conventions not stated in the retrieved specification set.
+
+Use exactly one branch result:
+
+----------------------------------------------------------------------
+`secure`
+----------------------------------------------------------------------
+
+Every conforming alternative of the assessed branch preserves the grounded
+security expectation through:
+
+- local enforcement;
+- mandatory same-branch closing control;
+- or an explicit, bounded exception that preserves the minimum safety
+  invariant.
+
+----------------------------------------------------------------------
+`adverse`
+----------------------------------------------------------------------
+
+At least one applicable, specification-reachable, conforming alternative
+contradicts a grounded security expectation and leaves a material security
+failure available.
+
+Attacker control and implementation exploitability are NOT required.
+
+----------------------------------------------------------------------
+`weakened`
+----------------------------------------------------------------------
+
+The grounded security guarantee becomes:
+
+- optional;
+- partial;
+- conditional;
+- incomplete;
+- less reliable;
+
+but a direct material contradiction cannot yet be established.
+
+----------------------------------------------------------------------
+`ambiguous`
+----------------------------------------------------------------------
+
+The normative specification text itself reasonably supports materially
+different security-relevant interpretations.
+
+This is normative ambiguity.
+
+Do NOT use `ambiguous` merely because retrieval or analyst evidence is
+incomplete.
+
+Only link an ambiguity to a design weakness when it has a plausible material
+security consequence.
+
+----------------------------------------------------------------------
+`insufficient_evidence`
+----------------------------------------------------------------------
+
+A required dependency remains unresolved and no defensible branch-security
+result can be reached.
+
+This is an epistemic result.
+
+It is NOT itself a design weakness.
+
+----------------------------------------------------------------------
+`not_security_relevant`
+----------------------------------------------------------------------
+
+The reconstructed branch does not materially affect a security-sensitive
+object, state, guarantee, or objective.
+
+Do not force a security interpretation onto ordinary procedural behavior.
+
+Use the corresponding `result_basis`:
+
+- local_enforcement;
+- mandatory_same_branch_compensation;
+- explicit_bounded_exception;
+- contradictory_branch;
+- partial_or_optional_control;
+- normative_ambiguity;
+- missing_context;
+- no_material_security_effect.
+
+----------------------------------------------------------------------
+Security-objective closure test
+----------------------------------------------------------------------
+
+A branch must not be classified `secure` merely because:
+
+- it follows the local candidate wording;
+- it is procedurally valid;
+- another sibling branch is safe;
+- later recovery exists;
+- an optional safeguard exists.
+
+For any material `MAY`, `OR`, exception, deletion, replacement, downgrade,
+fallback, or security-sensitive non-action branch, ask:
+
+1. What security-sensitive object or objective can this branch affect?
+
+2. Does every permitted alternative preserve that objective?
+
+3. If not locally, does an independent mandatory control close the same path?
+
+4. Is that control timely and security-equivalent?
+
+5. If the branch creates an irreversible exposure, stale binding, invalid
+   state, replay window, availability loss, or premature security effect before
+   the later safeguard, do not treat later recovery as closure.
+
+If closure cannot be established because evidence is missing, use
+`insufficient_evidence`.
+
+If a conforming branch clearly remains materially unsafe, use `adverse` or
+`weakened` as supported.
+
+======================================================================
+PHASE D — NORMATIVE BRANCH TRACES
+======================================================================
+
+Create branch traces for adverse, weakened, or materially ambiguous paths.
+
+Assign globally sequential IDs:
+
+    BT-001, BT-002, ...
+
+Do NOT restart numbering for each branch assessment.
+
+Each branch trace should represent:
+
+    controlling condition
+        →
+    normative branch
+        →
+    permitted / required action
+        →
+    resulting state/effect
+        →
+    grounded security expectation
+        →
+    conflict / weakening / ambiguity
+        →
+    consequence support
+
+A branch trace describes a SPECIFICATION path.
+
+It is not yet an attacker or exploit narrative.
+
+======================================================================
+PHASE E — EXCEPTION DISPOSITION
+======================================================================
+
+Record exceptions separately from branch results.
+
+Use:
+
+- `bounded_accepted`;
+- `review_required`;
+- `unsafe`.
+
+An exception may be `bounded_accepted` only when supported by:
+
+1. identifiable legitimate purpose;
+
+2. explicit and narrow entry conditions;
+
+3. appropriate actors and states;
+
+4. mandatory bounds or compensation;
+
+5. bounded duration, scope, repetition, or recovery where relevant;
+
+6. a minimum safety invariant preserved by all permitted branches;
+
+7. no residual concrete security-relevant failure available to a conforming
+   implementation.
+
+Normative presence alone does NOT make an exception accepted.
+
+If important criteria remain unresolved:
+
+    review_required
+
+If an exception leaves an unsafe conforming branch:
+
+    unsafe
+
+and the corresponding branch assessment should normally be:
+
+    adverse
+
+or:
+
+    weakened
+
+as supported by evidence.
+
+Accepted exceptions are observations.
+
+They are not automatically:
+
+- weaknesses;
+- vulnerability candidates.
+
+======================================================================
+PHASE F — DESIGN WEAKNESS IDENTIFICATION
+======================================================================
+
+Create a design weakness only when all three are supported:
+
+1. exact normative evidence identifies the enabling rule or rule interaction;
+
+2. an applicable conforming branch exposes the adverse behavior;
+
+3. a direct or plausibly derived MATERIAL security consequence exists.
+
+A design weakness does NOT require:
+
+- malicious actor reachability;
+- implementation confirmation;
+- complete exploitability.
+
+Missing attacker reachability must not convert an already established design
+weakness into `insufficient_evidence`.
+
+Use one primary mechanism:
+
+- predicate_or_polarity_error;
+- modality_relaxation;
+- unsafe_permitted_alternative;
+- missing_or_incomplete_guard;
+- deleted_or_incorrect_scope;
+- incomplete_validation;
+- overbroad_or_unbounded_exception;
+- unsafe_state_or_context_transition;
+- ordering_or_atomicity_failure;
+- freshness_or_binding_failure;
+- inadequate_timer_retry_or_recovery_bound;
+- cross_rule_or_cross_procedure_inconsistency;
+- unsafe_downgrade_or_fallback;
+- normative_ambiguity_or_underspecification;
+- other.
+
+Zero or more secondary mechanisms may also be used.
+
+Do NOT create one weakness per branch when several branches concern the same:
+
+- enabling behavior;
+- root mechanism;
+- direct protocol effect.
+
+Create one design weakness and link all affected rule/trace IDs.
+
+Keep separate:
+
+1. enabling normative behavior;
+
+2. direct protocol effect;
+
+3. affected security objectives;
+
+4. final security impact.
+
+Classify consequence support as:
+
+- direct_normative;
+- supported_derived;
+- conditional_external;
+- speculative.
+
+A consequence supported only as `speculative` is insufficient to emit a design
+weakness.
+
+A weakness may be established from the specification even when no malicious
+actor is needed.
+
+Examples include a conforming implementation choice, permitted unsafe
+alternative, stale-state transition, or unbounded retry behavior.
+
+======================================================================
+PHASE G — VULNERABILITY-CANDIDATE PROMOTION
+======================================================================
+
+A design weakness may be promoted to:
+
+    candidate_specification_vulnerability
+
+only when the evidence additionally supports:
+
+1. complete relevant preconditions and initial state;
+
+2. a specific actor;
+
+3. supported actor capability;
+
+4. an actor-controlled or reliably inducible trigger;
+
+5. every material normative guard evaluated;
+
+6. a complete specification-permitted or required trace to the adverse state;
+
+7. a concrete security impact;
+
+8. no mandatory specification control closes the same path;
+
+9. all remaining external assumptions explicitly listed.
+
+If a central element remains unresolved, including:
+
+- actor reachability;
+- important state transition;
+- material validation;
+- concrete impact;
+- compensating control;
+
+retain the design weakness and record validation needs.
+
+Do NOT emit a candidate merely because a branch is adverse.
+
+This stage may emit ONLY:
+
+    candidate_specification_vulnerability
+
+It must NOT claim:
+
+- validated vulnerability;
+- confirmed vulnerability;
+- confirmed exploit;
+- implementation vulnerability;
+- unqualified vulnerability.
+
+Independent validation occurs later.
+
+======================================================================
+PHASE H — SECURITY-ANALYSIS COMPLETENESS CHECK
+======================================================================
+
+This SP-free experiment must independently check whether every material
+security-relevant branch reconstructed from the candidate chunk has been
+meaningfully assessed.
+
+For every LR branch, verify that it is represented by one of:
+
+- a branch assessment;
+- an exception disposition;
+- an explicitly recorded unresolved analysis gap.
+
+Create:
+
+    analysis_coverage_gap
+
+when a material security-relevant branch cannot be defensibly assessed because
+a necessary dependency remains unresolved.
+
+A coverage gap means:
+
+    "The current chunk contains security-relevant behavior for which the
+     available version-matched specification evidence is insufficient to reach
+     a defensible security assessment."
+
+Do NOT silently invent the missing rule.
+
+Record:
+
+- affected rule IDs;
+- security relevance;
+- unresolved dependency or question;
+- supporting local evidence;
+- relevant retrieved dependencies, if any.
+
+This allows later evaluation to distinguish:
+
+    retrieval/context failure
+
+from:
+
+    security-finding reasoning failure.
+
+If the chunk contains no material security-relevant normative behavior:
+
+    branch_assessments may contain only `not_security_relevant` results;
+    design_weaknesses = [];
+    vulnerability_candidates = [];
+    analysis_coverage_gaps = [].
+
+======================================================================
+SUPPORT LEVELS
+======================================================================
+
+Record support independently for:
+
+- normative_evidence;
+- path_reachability;
+- security_impact.
+
+Each must be:
+
+- high;
+- medium;
+- low.
+
+Do NOT collapse them into one confidence value.
+
+For example:
+
+    normative_evidence = high
+    path_reachability = medium
+    security_impact = low
+
+is valid.
+
+======================================================================
+VALIDATION NEEDS
+======================================================================
+
+Use zero or more:
+
+- independent_specification_verification;
+- remote_normative_context;
+- actor_reachability;
+- implementation_behavior;
+- interoperability;
+- impact_reproduction;
+- repeatability;
+- compensating_control.
+
+Only include validation needs that remain genuinely unresolved.
+
+======================================================================
+EVIDENCE RULES
+======================================================================
+
+1. Local normative evidence must reference `LE-###` entries.
+
+2. Retrieved normative evidence must reference `RD-###` entries.
+
+3. Use at most two local evidence IDs for any:
+
+   - branch assessment;
+   - branch trace;
+   - exception;
+   - design weakness;
+   - vulnerability candidate;
+   - analysis coverage gap.
+
+4. Evidence of an unusual rule is not by itself evidence of exploitability.
+
+5. Absence of an explicit local rule is not automatically a weakness.
+
+Before claiming a missing safeguard:
+
+   - inspect the parent procedure;
+   - resolve relevant cross-references;
+   - check same-branch mandatory dependencies;
+   - perform lifecycle/security-objective retrieval where materially relevant.
+
+6. Never use outside or remembered attacks as normative evidence.
+
+7. Do not cite a retrieved control as closing a path unless its actor, trigger,
+   state, object, modality, and timing actually cover the adverse branch.
+
+8. If retrieved evidence conflicts with the local candidate wording, preserve
+   both and resolve the conflict explicitly. Do not automatically prefer the
+   local wording merely because it is in the input chunk.
+
+======================================================================
+MECHANICAL OUTPUT AUDIT
+======================================================================
+
+Before returning JSON, perform a final mechanical audit.
+
+1. Every local evidence excerpt must be one uninterrupted, verbatim substring
+   of:
+
+       section_segment_json.text
+
+2. Do NOT:
+
+   - omit intervening words;
+   - concatenate separated fragments;
+   - alter punctuation;
+   - insert ellipses;
+   - paraphrase.
+
+3. Every local and retrieved excerpt:
+
+   - should contain at most 25 words;
+   - MUST never exceed 30 words.
+
+4. Preserve decisive normative words and predicates.
+
+5. Every:
+
+       LE-###
+       LR-###
+       RD-###
+       BA-###
+       BT-###
+       EX-###
+       DW-###
+       CV-###
+       GAP-###
+
+   identifier must be unique within the complete segment result.
+
+6. Allocate BT identifiers sequentially across all branch assessments.
+
+7. Assess every material LR branch exactly once in `branch_assessments`,
+   unless it is explicitly marked non-security-relevant.
+
+8. Every referenced identifier must exist.
+
+9. For exception disposition:
+
+       bounded_accepted
+
+   set:
+
+       residual_security_failure = null
+
+   when no residual failure exists.
+
+10. For:
+
+       review_required
+       unsafe
+
+    provide a non-empty concrete residual failure or unresolved security
+    concern.
+
+11. Use empty arrays when nothing qualifies.
+
+12. Do not emit unsupported placeholder objects.
+
+13. Do not add keys outside the schema.
+
+14. Do not emit any SP IDs, upstream property assessments, or SP coverage
+    fields.
+
+======================================================================
+OUTPUT SCHEMA
+======================================================================
+
+{
+  "segment": {
+    "chunk_id": "",
+    "source_document": "",
+    "section_number": "",
+    "section_title": ""
+  },
+
+  "context_reconstruction": {
+    "local_evidence": [
+      {
+        "evidence_id": "LE-001",
+        "section": "",
+        "excerpt": ""
+      }
+    ],
+
+    "local_rule_branches": [
+      {
+        "rule_id": "LR-001",
+        "condition": "",
+        "modality":
+          "shall | shall_not | should | should_not | may | descriptive | other",
+        "action": "",
+        "resulting_state_or_effect": "",
+        "alternatives": [],
+        "exceptions": [],
+        "cross_references": [],
+        "local_evidence_ids": ["LE-001"]
+      }
+    ],
+
+    "retrieved_dependencies": [
+      {
+        "dependency_id": "RD-001",
+        "source_file": "",
+        "clause": "",
+
+        "role":
+          "precondition | supporting_behavior | guard | closing_control |
+           impact | state_transition | exception | recovery | lifecycle |
+           security_objective | cross_document_constraint | other",
+
+        "relationship": "",
+        "applies_to_rule_ids": ["LR-001"],
+        "excerpt": ""
+      }
+    ],
+
+    "unresolved_context": []
+  },
+
+  "branch_assessments": [
+    {
+      "assessment_id": "BA-001",
+
+      "rule_ids": ["LR-001"],
+
+      "security_focus": {
+        "objects_or_state": [],
+        "security_objectives": []
+      },
+
+      "grounded_security_expectation": "",
+
+      "expectation_basis":
+        "local_normative | retrieved_same_procedure |
+         cross_procedure | cross_document | distributed_inference |
+         none_required",
+
+      "result":
+        "secure | adverse | weakened | ambiguous |
+         insufficient_evidence | not_security_relevant",
+
+      "result_basis":
+        "local_enforcement | mandatory_same_branch_compensation |
+         explicit_bounded_exception | contradictory_branch |
+         partial_or_optional_control | normative_ambiguity |
+         missing_context | no_material_security_effect",
+
+      "reason": "",
+
+      "branch_traces": [
+        {
+          "trace_id": "BT-001",
+          "rule_ids": ["LR-001"],
+          "condition": "",
+          "modality": "",
+          "permitted_or_required_action": "",
+          "resulting_state_or_effect": "",
+          "grounded_security_expectation": "",
+          "security_conflict_or_risk": "",
+
+          "consequence_support":
+            "direct_normative | supported_derived |
+             conditional_external | speculative",
+
+          "local_evidence_ids": ["LE-001"],
+          "retrieved_dependency_ids": []
+        }
+      ],
+
+      "exception_ids": [],
+      "weakness_ids": [],
+      "candidate_ids": [],
+      "local_evidence_ids": [],
+      "retrieved_dependency_ids": [],
+
+      "support": {
+        "normative_evidence": "high | medium | low",
+        "path_reachability": "high | medium | low",
+        "security_impact": "high | medium | low"
+      },
+
+      "validation_needs": []
+    }
+  ],
+
+  "exceptions": [
+    {
+      "exception_id": "EX-001",
+      "rule_ids": [],
+
+      "disposition":
+        "bounded_accepted | review_required | unsafe",
+
+      "legitimate_purpose": "",
+      "entry_conditions": "",
+      "mandatory_bounds": "",
+      "minimum_safety_invariant": "",
+      "residual_security_failure": null,
+      "reason": "",
+      "weakness_ids": [],
+      "local_evidence_ids": [],
+      "retrieved_dependency_ids": []
+    }
+  ],
+
+  "design_weaknesses": [
+    {
+      "weakness_id": "DW-001",
+      "rule_ids": [],
+      "trace_ids": [],
+
+      "primary_mechanism":
+        "predicate_or_polarity_error | modality_relaxation |
+         unsafe_permitted_alternative | missing_or_incomplete_guard |
+         deleted_or_incorrect_scope | incomplete_validation |
+         overbroad_or_unbounded_exception |
+         unsafe_state_or_context_transition |
+         ordering_or_atomicity_failure |
+         freshness_or_binding_failure |
+         inadequate_timer_retry_or_recovery_bound |
+         cross_rule_or_cross_procedure_inconsistency |
+         unsafe_downgrade_or_fallback |
+         normative_ambiguity_or_underspecification |
+         other",
+
+      "secondary_mechanisms": [],
+      "affected_area": "",
+      "enabling_behavior": "",
+      "direct_protocol_effect": "",
+      "security_objectives_affected": [],
+      "security_impact": "",
+
+      "consequence_support":
+        "direct_normative | supported_derived |
+         conditional_external",
+
+      "compensating_controls": [
+        {
+          "description": "",
+
+          "assessment":
+            "closes_path | bounds_impact | supports_recovery |
+             irrelevant | uncertain",
+
+          "rule_ids": [],
+          "retrieved_dependency_ids": []
+        }
+      ],
+
+      "support": {
+        "normative_evidence": "high | medium | low",
+        "path_reachability": "high | medium | low",
+        "security_impact": "high | medium | low"
+      },
+
+      "validation_needs": [],
+      "local_evidence_ids": [],
+      "retrieved_dependency_ids": []
+    }
+  ],
+
+  "vulnerability_candidates": [
+    {
+      "candidate_id": "CV-001",
+
+      "candidate_type":
+        "candidate_specification_vulnerability",
+
+      "weakness_ids": [],
+      "rule_ids": [],
+      "trace_ids": [],
+      "actor": "",
+      "actor_capability": "",
+
+      "direction":
+        "uplink | downlink | bidirectional | internal | unknown",
+
+      "preconditions": "",
+      "trigger": "",
+      "guards_evaluated": "",
+      "specification_trace": "",
+      "concrete_security_impact": "",
+      "compensating_controls": "",
+      "unresolved_assumptions": [],
+
+      "support": {
+        "normative_evidence": "high | medium | low",
+        "path_reachability": "high | medium | low",
+        "security_impact": "high | medium | low"
+      },
+
+      "validation_needs": [],
+      "local_evidence_ids": [],
+      "retrieved_dependency_ids": []
+    }
+  ],
+
+  "unresolved_questions": [],
+
+  "analysis_coverage_gaps": [
+    {
+      "gap_id": "GAP-001",
+      "rule_ids": [],
+      "security_relevance": "",
+      "unresolved_need": "",
+      "local_evidence_ids": [],
+      "retrieved_dependency_ids": []
+    }
+  ]
+}
+
+======================================================================
+INPUT
+======================================================================
+
+Raw candidate 3GPP Release-17 chunk:
+
+{{section_segment_json}}

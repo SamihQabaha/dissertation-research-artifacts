@@ -1,0 +1,994 @@
+{
+  "name": "nas_security_property_extraction_updated",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "chunk_analysis": {
+        "type": "object",
+        "properties": {
+          "source_document": {
+            "type": "string"
+          },
+          "chunk_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "analysis_mode": {
+            "type": "string",
+            "enum": [
+              "suspicious_candidate_security_invariant_reconstruction"
+            ]
+          },
+          "chunk_security_relevance": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              "none"
+            ]
+          },
+          "chunk_role": {
+            "type": "string",
+            "enum": [
+              "complete_rule",
+              "procedure_step",
+              "conditional_branch",
+              "alternative_branch",
+              "exception",
+              "failure_path",
+              "recovery_path",
+              "retransmission_path",
+              "continuation",
+              "list_item",
+              "state_transition",
+              "other"
+            ]
+          },
+          "parent_procedure": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context_reconstruction_status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "mostly_complete",
+              "incomplete"
+            ]
+          },
+          "unresolved_dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "source_document",
+          "chunk_id",
+          "section",
+          "title",
+          "analysis_mode",
+          "chunk_security_relevance",
+          "chunk_role",
+          "parent_procedure",
+          "context_reconstruction_status",
+          "unresolved_dependencies"
+        ],
+        "additionalProperties": false
+      },
+      "retrieval_summary": {
+        "type": "object",
+        "properties": {
+          "retrieval_performed": {
+            "type": "boolean"
+          },
+          "retrieval_topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resolved_references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reference": {
+                  "type": "string"
+                },
+                "source_document": {
+                  "type": "string"
+                },
+                "section": {
+                  "type": "string"
+                },
+                "purpose": {
+                  "type": "string",
+                  "enum": [
+                    "understanding",
+                    "independent_control",
+                    "lifecycle",
+                    "compensating_control",
+                    "cross_procedure",
+                    "cross_document",
+                    "other"
+                  ]
+                }
+              },
+              "required": [
+                "reference",
+                "source_document",
+                "section",
+                "purpose"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "retrieval_performed",
+          "retrieval_topics",
+          "resolved_references"
+        ],
+        "additionalProperties": false
+      },
+      "observed_rule_model": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "observed_rule_id": {
+              "type": "string"
+            },
+            "actor": {
+              "type": "string"
+            },
+            "trigger": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "logical_operator": {
+              "type": "string",
+              "enum": [
+                "simple",
+                "and",
+                "or",
+                "not",
+                "mixed"
+              ]
+            },
+            "implication_direction": {
+              "type": "string",
+              "enum": [
+                "conditions_imply_behavior",
+                "behavior_implies_conditions",
+                "bidirectional",
+                "not_applicable"
+              ]
+            },
+            "observed_modality": {
+              "type": "string",
+              "enum": [
+                "shall",
+                "shall_not",
+                "should",
+                "should_not",
+                "may",
+                "may_not",
+                "conditional",
+                "mixed"
+              ]
+            },
+            "observed_behavior": {
+              "type": "string"
+            },
+            "resulting_effect": {
+              "type": "string"
+            },
+            "exceptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "target_evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "observed_rule_id",
+            "actor",
+            "trigger",
+            "conditions",
+            "logical_operator",
+            "implication_direction",
+            "observed_modality",
+            "observed_behavior",
+            "resulting_effect",
+            "exceptions",
+            "target_evidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "reconstructed_context": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "preconditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "messages_or_events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timers_counters_freshness": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "security_context_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "security_checks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "failure_or_recovery_behavior": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "independent_security_controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "compensating_controls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "entities",
+          "preconditions",
+          "states",
+          "messages_or_events",
+          "timers_counters_freshness",
+          "security_context_conditions",
+          "security_checks",
+          "exceptions",
+          "failure_or_recovery_behavior",
+          "independent_security_controls",
+          "compensating_controls"
+        ],
+        "additionalProperties": false
+      },
+      "procedure_structure": {
+        "type": "object",
+        "properties": {
+          "controlling_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "branches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "branch_id": {
+                  "type": "string"
+                },
+                "condition": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "target",
+                    "reconstructed",
+                    "target_plus_context"
+                  ]
+                },
+                "normative_strength": {
+                  "type": "string",
+                  "enum": [
+                    "shall",
+                    "shall_not",
+                    "should",
+                    "should_not",
+                    "may",
+                    "conditional",
+                    "mixed"
+                  ]
+                },
+                "behavior": {
+                  "type": "string"
+                },
+                "resulting_effect": {
+                  "type": "string"
+                },
+                "security_relevance": {
+                  "type": "string",
+                  "enum": [
+                    "relevant",
+                    "not_relevant",
+                    "unresolved"
+                  ]
+                },
+                "security_relevance_reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "branch_id",
+                "condition",
+                "source",
+                "normative_strength",
+                "behavior",
+                "resulting_effect",
+                "security_relevance",
+                "security_relevance_reason"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "controlling_conditions",
+          "branches"
+        ],
+        "additionalProperties": false
+      },
+      "sp_set": {
+        "type": "object",
+        "properties": {
+          "security_property_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "security_properties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "property_id": {
+                  "type": "string"
+                },
+                "property_name": {
+                  "type": "string"
+                },
+                "security_property": {
+                  "type": "string"
+                },
+                "governs_branch_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "confidentiality",
+                      "integrity",
+                      "availability",
+                      "authenticity",
+                      "authentication",
+                      "authorization",
+                      "replay_freshness",
+                      "identity_privacy",
+                      "state_transition",
+                      "timer_control",
+                      "message_ordering",
+                      "key_management",
+                      "security_context",
+                      "input_validation",
+                      "procedure_enforcement",
+                      "lifecycle",
+                      "binding",
+                      "recovery",
+                      "other"
+                    ]
+                  }
+                },
+                "security_objectives": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Confidentiality",
+                      "Integrity",
+                      "Availability",
+                      "Authenticity"
+                    ]
+                  }
+                },
+                "scope": {
+                  "type": "object",
+                  "properties": {
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "procedure": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "states": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "entities",
+                    "procedure",
+                    "messages",
+                    "states"
+                  ],
+                  "additionalProperties": false
+                },
+                "preconditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "trigger": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required_behavior": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "prohibited_behavior": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "exceptions_or_qualifiers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "expected_modality": {
+                  "type": "string",
+                  "enum": [
+                    "shall",
+                    "shall_not",
+                    "should",
+                    "should_not",
+                    "may",
+                    "conditional",
+                    "derived"
+                  ]
+                },
+                "normative_basis": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "shall",
+                      "shall_not",
+                      "should",
+                      "should_not",
+                      "may",
+                      "conditional",
+                      "derived_from_multiple_rules"
+                    ]
+                  }
+                },
+                "basis_type": {
+                  "type": "string",
+                  "enum": [
+                    "direct_local",
+                    "local_plus_context",
+                    "cross_section",
+                    "cross_procedure",
+                    "cross_document",
+                    "distributed_inference"
+                  ]
+                },
+                "local_alignment": {
+                  "type": "string",
+                  "enum": [
+                    "aligned",
+                    "weaker_than_invariant",
+                    "stronger_than_invariant",
+                    "conflicts_with_invariant",
+                    "independent"
+                  ]
+                },
+                "adversarial_relevance": {
+                  "type": "string"
+                },
+                "compensating_controls": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "evidence": {
+                  "type": "object",
+                  "properties": {
+                    "target_chunk": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "text"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "retrieved_same_document": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "section": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "section",
+                          "text"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "retrieved_cross_document": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "document": {
+                            "type": "string"
+                          },
+                          "section": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "document",
+                          "section",
+                          "text"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "target_chunk",
+                    "retrieved_same_document",
+                    "retrieved_cross_document"
+                  ],
+                  "additionalProperties": false
+                },
+                "inference_chain": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "derivation": {
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                }
+              },
+              "required": [
+                "property_id",
+                "property_name",
+                "security_property",
+                "governs_branch_ids",
+                "category",
+                "security_objectives",
+                "scope",
+                "preconditions",
+                "trigger",
+                "required_behavior",
+                "prohibited_behavior",
+                "exceptions_or_qualifiers",
+                "expected_modality",
+                "normative_basis",
+                "basis_type",
+                "local_alignment",
+                "adversarial_relevance",
+                "compensating_controls",
+                "evidence",
+                "inference_chain",
+                "derivation",
+                "confidence"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "property_relations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source_property": {
+                  "type": "string"
+                },
+                "relation": {
+                  "type": "string",
+                  "enum": [
+                    "depends_on",
+                    "prerequisite_for",
+                    "reinforces",
+                    "exception_to",
+                    "complements",
+                    "overlaps_without_merging"
+                  ]
+                },
+                "target_property": {
+                  "type": "string"
+                },
+                "explanation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source_property",
+                "relation",
+                "target_property",
+                "explanation"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "security_property_count",
+          "security_properties",
+          "property_relations"
+        ],
+        "additionalProperties": false
+      },
+      "branch_coverage_audit": {
+        "type": "object",
+        "properties": {
+          "security_relevant_branch_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "covered_branch_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "coverage_complete": {
+            "type": "boolean"
+          },
+          "branch_coverage": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "branch_id": {
+                  "type": "string"
+                },
+                "security_relevance": {
+                  "type": "string",
+                  "enum": [
+                    "relevant",
+                    "not_relevant",
+                    "unresolved"
+                  ]
+                },
+                "governing_sp_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "coverage_status": {
+                  "type": "string",
+                  "enum": [
+                    "covered",
+                    "not_security_relevant",
+                    "unresolved_gap"
+                  ]
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "branch_id",
+                "security_relevance",
+                "governing_sp_ids",
+                "coverage_status",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "sp_coverage_gaps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "branch_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "missing_property_need": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "additional_retrieval_needed": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "branch_ids",
+                "missing_property_need",
+                "reason",
+                "additional_retrieval_needed"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "security_relevant_branch_count",
+          "covered_branch_count",
+          "coverage_complete",
+          "branch_coverage",
+          "sp_coverage_gaps"
+        ],
+        "additionalProperties": false
+      },
+      "coverage_assessment": {
+        "type": "object",
+        "properties": {
+          "confidentiality": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "considered_not_supported"
+                ]
+              },
+              "sp_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "sp_ids"
+            ],
+            "additionalProperties": false
+          },
+          "integrity": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "considered_not_supported"
+                ]
+              },
+              "sp_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "sp_ids"
+            ],
+            "additionalProperties": false
+          },
+          "availability": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "considered_not_supported"
+                ]
+              },
+              "sp_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "sp_ids"
+            ],
+            "additionalProperties": false
+          },
+          "authenticity": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "considered_not_supported"
+                ]
+              },
+              "sp_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "sp_ids"
+            ],
+            "additionalProperties": false
+          },
+          "adversarial_dimensions_considered": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "possible_missing_context": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "confidentiality",
+          "integrity",
+          "availability",
+          "authenticity",
+          "adversarial_dimensions_considered",
+          "possible_missing_context"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "chunk_analysis",
+      "retrieval_summary",
+      "observed_rule_model",
+      "reconstructed_context",
+      "procedure_structure",
+      "sp_set",
+      "branch_coverage_audit",
+      "coverage_assessment"
+    ],
+    "additionalProperties": false
+  }
+}
